@@ -1,45 +1,89 @@
-# Performance Evaluation of Reinforcement Learning and Genetic Algorithms
+# Agent Arena
 
-__Premise__:
+### Q-Learning vs. Genetic Algorithms in a Competitive Tank Environment
 
-In this project, we seek to compare the results of an agent trained using reinforcement learning versus an agent trained using a genetic algorithm. Specifically, we seek to see which agent can more quickly learn to effectively play a game in a controlled environment. The game board is a rectangular grid, where two agents are placed at opposite corners of the grid. The agents attempt to win by shooting the other a single time; the agents can move up, down, left, right, move their gun in any of these directions, and shoot. The board contains impassable and indestructible walls; all other tiles can be passed and shot through.
+[GIF / screenshot here]
 
-__File Structure__:
+## Overview
 
-* `images/`: Contains images used throughout the game
-* `pkl_files/`: Contains files that contain the weights for trained models
-* `Action.py`: Enumeration of possible actions agents can take
-* `ActionFunction.py`: Abstract class defining how an agent acts (e.g., what action it takes in a given state)
-* `Board.py`: Defines the board on which agents play the game
-* `Character.py`: Represents an agent in the game, including its associated functionality and fields
-* `Direction.py`: Enumeration of possible directions agents can move or rotate to
-* `GA.py`: Implementation of genetic algorithm `ActionFunction`
-* `RL.py`: Implementation of reinforcement learning `ActionFunction`
-* `State.py`: Represents the state of the board
-* `Tile.py`: Represents a single tile on the board
-* `main.py`: Entry point to run the program
+Agent Arena is a competitive tank game designed to compare Q-learning and genetic algorithms for learning game-playing policies.
 
-__To Run__:
+Two agents compete on a grid-based environment containing walls and line-of-sight combat. Agents can move, rotate their weapon, and fire, with the objective of eliminating their opponent with a single shot.
 
-Run the file `main.py` with one of the following as a command line argument:
+We trained both approaches against a consistently trained opponent and compared their training speed, exploration, and resulting strategies.
 
-* `rlvrl`: Play a game with a trained RL agent vs. a trained RL agent
-* `rlvga`: Play a game with a trained RL agent as the first player vs. a trained GA agent as the second player
-* `gavrl`: Play a game with a trained GA agent as the first player vs. a trained RL agent as the second player
-* `gavga`: Play a game with a trained GA agent vs. a trained GA agent
-* `optvga`: Play a game with the optimal agent as the first player vs. a GA agent as the second player
-* `optvrl`: Play a game with the optimal agent as the first player vs. a RL agent as the second player
-* `optvrl_10`: Play 10 games with the optimal agent as the first player vs. a RL agent as the second player
-* `optvga_10`: Play 10 games with the optimal agent as the first player vs. a GA agent as the second player
-* `training_opt`: Train the optimal agent
+## Approaches
 
-If you want to view the GUI while the games are running, make sure the 'gui_flag' is set to 'True' in 'main.py'
+### Q-Learning
 
-If you want to play the game without training the agents during the game, make sure 'OPTIMAL' is set to 'True' in 'main.py'
+The reinforcement learning agent uses a Q-table mapping game states to action values. We experimented with different decay rates to study the effect of exploration on training time and learned strategies.
 
-Some of these commands can be followed by 'reset' afterwards, indicating that you are removing the existing information on the agent in 'pkl_files' and training a new one. These include:
+### Genetic Algorithm
 
-* `rlvrl reset`
-* `gavga reset`
-* `optvrl reset`
-* `optvga reset`
+The genetic algorithm maintains a population of policies. Policies are evaluated using a fitness function, with higher-performing policies selected for combination and mutation to produce subsequent generations.
+
+## Results
+
+| Agent | Episodes to 90% Win Rate | Unique States |
+|---|---:|---:|
+| Q-Learning — Low Decay | ~4,566 | 511 |
+| Q-Learning — High Decay | ~317,843 | 849 |
+| Genetic Algorithm | ~3,085 | — |
+
+The low-decay Q-learning agent converged substantially faster than the high-decay agent, while the high-decay agent explored more unique states. The genetic algorithm reached the 90% win threshold in fewer episodes than either Q-learning configuration.
+
+When evaluated against one another, the trained agents developed different strategies depending on their training configuration.
+
+## Running the Project
+
+### Requirements
+
+- Python
+- Pygame
+
+### Run
+
+    python main.py <mode>
+
+Available modes:
+
+- `rlvrl` — RL vs. RL
+- `rlvga` — RL vs. GA
+- `gavrl` — GA vs. RL
+- `gavga` — GA vs. GA
+- `optvga` — Optimal vs. GA
+- `optvrl` — Optimal vs. RL
+- `optvrl_10` — 10 Optimal vs. RL games
+- `optvga_10` — 10 Optimal vs. GA games
+- `training_opt` — Train the optimal agent
+
+Append `reset` to supported training commands to retrain an agent from scratch.
+
+Set `gui_flag = True` in `main.py` to display the game while it runs.
+
+## Project Structure
+
+- `Board.py` — game board and environment
+- `Character.py` — agent representation and behavior
+- `State.py` — game state representation
+- `Action.py` — available agent actions
+- `Direction.py` — movement and weapon directions
+- `RL.py` — Q-learning implementation
+- `GA.py` — genetic algorithm implementation
+- `ActionFunction.py` — agent action interface
+- `main.py` — program entry point
+
+## Team & Contributions
+
+This was a four-person team project at Northeastern University, developed collaboratively using VS Code Live Share.
+
+**Collaborators:**
+- Kanav Bengani
+- Nathan Yan
+- Ryan Saperstein
+
+## Technical Report
+
+The full project report, including the methodology, experimental setup, results, and analysis, is available here:
+
+[**Read the full technical report**](report/project-report.pdf)
