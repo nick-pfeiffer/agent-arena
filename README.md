@@ -2,8 +2,9 @@
 
 ### Q-Learning vs. Genetic Algorithms in a Competitive Tank Environment
 
-[GIF / screenshot here]
-
+<p>
+  <img src="agent_arena_demo.gif" width="400">
+</p>
 ## Overview
 
 Agent Arena is a competitive tank game designed to compare Q-learning and genetic algorithms for learning game-playing policies.
